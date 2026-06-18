@@ -1,5 +1,4 @@
 services:
-  # --- ARMADA FRONTEND (VUE.JS + NGINX) ---
   frontend:
     image: reszamalvin/pracindo-frontend:latest
     container_name: vue_frontend
@@ -10,10 +9,7 @@ services:
       - "traefik.http.routers.pracindo-frontend.tls.certresolver=letsencrypt"
       - "traefik.http.services.pracindo-frontend.loadbalancer.server.port=80"
     restart: unless-stopped
-    networks:
-      - pracindo-supply-chain
 
-  # --- ARMADA BACKEND (DJANGO + GUNICORN) ---
   backend:
     image: reszamalvin/pracindo-backend:latest
     container_name: django_backend
@@ -36,22 +32,15 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    networks:
-      - pracindo-supply-chain
 
-  # --- ARMADA DATABASE (POSTGRESQL) ---
   db:
     image: postgres:15
     container_name: postgres_db
     env_file:
       - .env
     restart: unless-stopped
-    expose:
-      - "5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks:
-      - pracindo-supply-chain
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-postgres}" ]
       interval: 5s
@@ -60,7 +49,3 @@ services:
 
 volumes:
   postgres_data:
-
-networks:
-  pracindo-supply-chain:
-    external: true
