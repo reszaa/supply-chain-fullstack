@@ -1,0 +1,28 @@
+{
+  "name": "supply_chain_management",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "tailwind:init": "npx tailwindcss init -p"
+  },
+  "dependencies": {
+    "@primevue/themes": "^4.5.4",
+    "@tailwindcss/vite": "^4.3.0",
+    "axios": "^1.17.0",
+    "chart.js": "^4.5.1",
+    "primeicons": "^7.0.0",
+    "primevue": "^4.5.5",
+    "tailwindcss": "^4.3.0",
+    "vue": "^3.5.34",
+    "vue-router": "^5.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.6",
+    "vite": "^8.0.12",
+    "vite-plugin-vue-devtools": "^8.1.2"
+  }
+}

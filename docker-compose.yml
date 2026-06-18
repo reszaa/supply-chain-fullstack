@@ -1,0 +1,62 @@
+services:
+  backend:
+    image: reszamalvin/pracindo-backend:latest
+    container_name: django_backend
+    command: >
+      sh -c "python manage.py collectstatic --noinput &&
+             python manage.py migrate &&
+             gunicorn pracindo_backend.wsgi:application --bind 0.0.0.0:8000"
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pracindo-backend.rule=Host(`api.pracindo-marshitek.company`)"
+      - "traefik.http.routers.pracindo-backend.entrypoints=websecure"
+      - "traefik.http.routers.pracindo-backend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.pracindo-backend.loadbalancer.server.port=8000"
+    restart: unless-stopped
+    depends_on:
+      - db
+    networks:
+      - pcjm_default
+
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    env_file:
+      - .env
+    restart: unless-stopped
+    expose:
+      - "5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - pcjm_default
+      - postgresql-mfov_default
+
+  frontend:
+    image: reszamalvin/pracindo-frontend:latest
+    container_name: vue_frontend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pracindo-frontend.rule=Host(`pracindo-marshitek.company`)"
+      - "traefik.http.routers.pracindo-frontend.entrypoints=websecure"
+      - "traefik.http.routers.pracindo-frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.pracindo-frontend.loadbalancer.server.port=80"
+    restart: unless-stopped
+    depends_on:
+      - backend
+    networks:
+      - pcjm_default
+
+networks:
+  pcjm_default:
+    external: true
+  postgresql-mfov_default:
+    external: true
+
+volumes:
+  postgres_data:
