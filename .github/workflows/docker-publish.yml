@@ -4,8 +4,7 @@ on:
   push:
     branches: [ "main" ]
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+# Blok env: FORCE_JAVASCRIPT_ACTIONS_TO_NODE24 dihapus dari sini
 
 jobs:
   build-and-push:
@@ -22,7 +21,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push Backend Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6 # Di-update dari v5 ke v6
         with:
           context: ./scm__backend_v2
           file: ./scm__backend_v2/Dockerfile
@@ -34,7 +33,7 @@ jobs:
           echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}" > ./supply_chain_management/.env.production
 
       - name: Build and push Frontend Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6 # Di-update dari v5 ke v6
         with:
           context: ./supply_chain_management
           file: ./supply_chain_management/Dockerfile
