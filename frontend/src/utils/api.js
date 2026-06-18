@@ -9,7 +9,7 @@ const api = axios.create({
     }
 })
 
-// Pemasangan Token (Interceptor)
+
 api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('pracindo_token')
