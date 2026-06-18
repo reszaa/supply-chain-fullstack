@@ -22,7 +22,7 @@ services:
       db:
         condition: service_healthy
     networks:
-      - pcjm_default
+      - pracindo-supply-chain
 
   db:
     image: postgres:15
@@ -35,7 +35,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - pcjm_default
+      - pracindo-supply-chain
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-postgres}" ]
       interval: 5s
@@ -46,5 +46,5 @@ volumes:
   postgres_data:
 
 networks:
-  pcjm_default:
+  pracindo-supply-chain:
     external: true
